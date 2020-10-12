@@ -1,9 +1,13 @@
-import { Injectable } from "./../../core/service/dependency-injection/injectable";
 
-@Injectable()
 export class Service {
-  constructor(){}
+  private i = 0;
   public test() {
     console.log('service');
+    console.log(this.i)
+    this.i++;
+  }
+
+  public test2(): void {
+    console.log('serdupa', this.i);
   }
 }
