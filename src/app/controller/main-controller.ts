@@ -3,13 +3,16 @@ import { Service } from "../service/service";
 import { ServiceTest } from "../service/service-test";
 import {Controller, Get, get} from "../../core/decorator/routing/routing";
 import {ServerResponse} from "http";
+import {ConfigClass} from "../../core/config/config-class";
+import {AbstractController} from "../../core/classes/controller/abstract-controller";
 
 @Injectable()
 @Controller('/test')
-export class MainController {
+export class MainController extends AbstractController {
   i = 0;
   constructor(private service: ServiceTest) {
-        this.init();
+      super();
+      this.init();
   }
   @Get('/')
   public init(): void {
@@ -25,7 +28,9 @@ export class MainController {
   public test(res: ServerResponse): void {
         this.service.test();
         console.log(res)
-        res.write('chuj');
+        let config: ConfigClass = ConfigClass.getInstance();
+
+        res.write('chuj' + config.path);
         res.end();
 
   }

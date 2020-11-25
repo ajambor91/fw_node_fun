@@ -1,2 +1,5 @@
-{"appStructure":
-  {"controllers": "controllers"}
+{
+  "appStructure": {
+    "controllers": "controller"
+  }
+}
