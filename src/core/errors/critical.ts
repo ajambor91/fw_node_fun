@@ -1,4 +1,4 @@
-export class Exception{
+export class Critical{
     private _message: string;
     constructor(message: string) {
         this._message = message;
@@ -9,3 +9,4 @@ export class Exception{
         process.exit();
     }
 }
+//TODO dodać dziedziczenie po Error

@@ -37,7 +37,6 @@ export class Routes {
     
     var name = "foo";
     var dypa = new String('dsads');
-    console.log('dupa');
     var func = new Function(
       "return this.router " + this.routes.index.method + "(this.routes.index.path, (req res) => { res.send('indes')};")();
 

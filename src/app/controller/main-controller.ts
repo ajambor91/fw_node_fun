@@ -1,41 +1,34 @@
-import { Injectable } from "../../core/decorator/injection/injection";
-import { Service } from "../service/service";
-import { ServiceTest } from "../service/service-test";
-import {Controller, Get, get} from "../../core/decorator/routing/routing";
-import {ServerResponse} from "http";
+import {Injectable} from "../../core/decorator/injection/injection";
+import {ServiceTest} from "../service/service-test";
+import {Controller, Get} from "../../core/decorator/routing/routing";
 import {ConfigClass} from "../../core/config/config-class";
 import {AbstractController} from "../../core/classes/controller/abstract-controller";
+import {BadRequest, NotFound} from "../../core/responses/response";
 
 @Injectable()
 @Controller('/test')
 export class MainController extends AbstractController {
-  i = 0;
   constructor(private service: ServiceTest) {
       super();
-      this.init();
   }
   @Get('/')
   public init(): void {
-    console.log('main init?', this.i);
-    this.i++;
-  
+      let config: ConfigClass = ConfigClass.getInstance();
+      new NotFound();
   
 
     // this.serviceTest.test2();
 
   }
   @Get('/test')
-  public test(res: ServerResponse): void {
+  public test(): void {
         this.service.test();
-        console.log(res)
         let config: ConfigClass = ConfigClass.getInstance();
+        new BadRequest();
 
-        res.write('chuj' + config.path);
-        res.end();
 
   }
   @Get('/dupa')
   public dupa(): void {
-    console.log('dupa tez odpalila')
   }
 }

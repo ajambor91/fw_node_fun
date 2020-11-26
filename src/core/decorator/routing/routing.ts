@@ -37,9 +37,9 @@ export const Get = (path: string): MethodDecorator => {
 
 
 export const Routing = function () {
-    console.log('dupa')
     return true;
 }
 export const get = (val: any) => (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
+
 };
 

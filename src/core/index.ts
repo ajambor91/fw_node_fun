@@ -10,7 +10,9 @@ import {ConfigClass} from "./config/config-class";
 import path from "path";
 import * as fs from "fs";
 import {AbstractController} from "./classes/controller/abstract-controller";
-import {Exception} from "./exceptions/exception";
+import {Critical} from "./errors/critical";
+import {RouterHelper} from "./helpers/router-helper";
+import {response} from "express";
 
     // tslint:disable-next-line:no-console
 class App {
@@ -52,20 +54,39 @@ class App {
     private checkControllers(): void {
         this._controllers.forEach((item: IConstructor<any>) => {
             if (!(item.prototype instanceof AbstractController)) {
-                new Exception('Controllers not extend AbstractController');
+                new Critical('Controllers not extend AbstractController');
             }
         });
     }
 
     private startServer(): void {
         this.server = createServer((request: IncomingMessage, response: ServerResponse) => {
-            this._controllers.forEach((item: IConstructor<any>) => {
+            let item: IConstructor<any>;
+            for (item of this._controllers) {
+                const prefix: string = Reflect.getMetadata('prefix', item).replace('/','');
+                const controllerPath: string = RouterHelper.returnControllerPathUrl(request);
+                if (prefix !== controllerPath) {
+                    continue;
+                }
                 const routes: Array<IMethods> = Reflect.getMetadata('routes', item);
                 const instance = Injector.resolve(item);
                 routes.forEach( route => {
                     this.runMethod(route, request, instance, response );
                 })
-            })
+            }
+            // [MainController].forEach((item: IConstructor<any>) => {
+            //     // const instance = this.getRequiredDependencies(item);
+            //     const prefix = Reflect.getMetadata('prefix', item);
+            //     if (prefix !== request.url) {
+            //         console.log('in loop', request.url, prefix)
+            //     }
+            //     const routes: Array<IMethods> = Reflect.getMetadata('routes', item);
+            //     const instance = Injector.resolve(item);
+            //     console.log(instance,'index')
+            //     routes.forEach( route => {
+            //         this.runMethod(route, request, instance, response );
+            //     })
+            // })
           });
     }
 
@@ -76,9 +97,9 @@ class App {
     }
 
     private runMethod(route: IMethods, url: IncomingMessage, classParameter: any, res: ServerResponse) : () => any {
-        if (url.url === route.path) {
-            console.log('injdkhfjkdhfkjdhfkjdhfk')
-            return  classParameter[route.methodName](res);
+        if (RouterHelper.returnMethodUrl(url) === route.path.replace('/','')) {
+            classParameter.serverResponse = res;
+            return  classParameter[route.methodName]();
 
         } else if(url.url !== route.path){
             res.statusCode = 500;
@@ -117,7 +138,7 @@ class App {
 
     private checkControllersPath(): void {
         if (!fs.existsSync(`${this._config.path}/${this._controllersPath}/`)) {
-            new Exception('Controllers path doesn\'t exist');
+            new Critical('Controllers path doesn\'t exist');
         }
     }
 }

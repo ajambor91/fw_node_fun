@@ -10,7 +10,6 @@ export const Injector = new class {
     // console.log(resolvedParams, 'resolved params')
     const instance = new Target(...resolvedParams);
     // console.log(instance,'instance')
-    console.log('injector', this.i);
     this.i++;
     return instance;
   }
