@@ -18,7 +18,8 @@ export abstract class Response {
     private readonly _message: string;
     private readonly _isJSON: boolean;
     private readonly _statusCode: StatusCodes;
-    constructor(statusCode: StatusCodes, message?: string, isJSON: boolean = true) {
+
+    protected constructor(statusCode: StatusCodes, message?: string, isJSON: boolean = true) {
         this._message = message;
         this._isJSON = isJSON;
         this._statusCode = statusCode;
@@ -27,7 +28,7 @@ export abstract class Response {
 
     private sendError(): void {
         const headers = {
-            'Content-Type': this._isJSON ?  'text/json' :  'text/plain';
+            'Content-Type': this._isJSON ?  'text/json' :  'text/plain'
         };
 
         ResponseContainer.serverResponse.writeHead(this._statusCode, headers);

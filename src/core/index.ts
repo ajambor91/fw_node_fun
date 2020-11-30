@@ -1,18 +1,14 @@
-import { Routes } from './router/routes';
 import { createServer, IncomingMessage, Server, ServerResponse } from 'http';
 import { Injector, Injectable } from './decorator/injection/injection';
-import { MainController } from './../app/controller/main-controller';
 import 'reflect-metadata';
 import {IMethods} from "./decorator/routing/types/i-methods";
 import {IConstructor} from "./decorator/injection/types/i-constructor";
-import {IObject} from "./decorator/routing/types/i-object";
 import {ConfigClass} from "./config/config-class";
 import path from "path";
 import * as fs from "fs";
 import {AbstractController} from "./classes/controller/abstract-controller";
 import {Critical} from "./errors/critical";
 import {RouterHelper} from "./helpers/router-helper";
-import {response} from "express";
 
     // tslint:disable-next-line:no-console
 class App {
@@ -31,17 +27,10 @@ class App {
     }
 
     private initApplication(): void {
-        // this.app.use('/', this.routes.router)
-        // this.app.listen( this.port, (): void => {
-        //     console.log( `server started at ${ this.domain }:${ this.port }` );
-        // });
-
         this.prepareApp();
         this.startServer();
         this.serverListen();
-        // this.mainController.service.test();
-        this.i++
-
+        this.i++;
     }
 
     private prepareApp(): void {
@@ -74,19 +63,6 @@ class App {
                     this.runMethod(route, request, instance, response );
                 })
             }
-            // [MainController].forEach((item: IConstructor<any>) => {
-            //     // const instance = this.getRequiredDependencies(item);
-            //     const prefix = Reflect.getMetadata('prefix', item);
-            //     if (prefix !== request.url) {
-            //         console.log('in loop', request.url, prefix)
-            //     }
-            //     const routes: Array<IMethods> = Reflect.getMetadata('routes', item);
-            //     const instance = Injector.resolve(item);
-            //     console.log(instance,'index')
-            //     routes.forEach( route => {
-            //         this.runMethod(route, request, instance, response );
-            //     })
-            // })
           });
     }
 
@@ -104,7 +80,6 @@ class App {
         } else if(url.url !== route.path){
             res.statusCode = 500;
             res.statusMessage = 'Not found';
-
         }
         else if(url.url === route.path && url.method.toLocaleLowerCase() !== route.requestMethod){
             res.statusCode = 400;

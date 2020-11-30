@@ -3,7 +3,7 @@ import {ServiceTest} from "../service/service-test";
 import {Controller, Get} from "../../core/decorator/routing/routing";
 import {ConfigClass} from "../../core/config/config-class";
 import {AbstractController} from "../../core/classes/controller/abstract-controller";
-import {BadRequest, NotFound} from "../../core/responses/response";
+import {BadRequest, NotFound, Ok} from "../../core/responses/response";
 
 @Injectable()
 @Controller('/test')
@@ -14,7 +14,7 @@ export class MainController extends AbstractController {
   @Get('/')
   public init(): void {
       let config: ConfigClass = ConfigClass.getInstance();
-      new NotFound();
+      new Ok('data');
   
 
     // this.serviceTest.test2();
